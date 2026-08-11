@@ -3,6 +3,7 @@ package com.kerp.notificationservice;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -16,6 +17,8 @@ class NotificationServiceApplicationTests {
     @MockitoBean
     private JwtDecoder jwtDecoder;
 
+    @MockitoBean
+    private JavaMailSender javaMailSender;
     @Test
     void contextLoads() {
     }
