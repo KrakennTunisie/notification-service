@@ -1,0 +1,46 @@
+services:
+  notification-service:
+    build:
+      context: .
+    container_name: notification-server
+    ports:
+      - "8086:8086"
+    depends_on:
+      notification-db:
+        condition: service_started
+    restart: unless-stopped
+    volumes:
+      - notification_storage:/app/storage
+    networks:
+      - ms-net
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      GMAIL_USERNAME: ${GMAIL_USERNAME}
+      GMAIL_PASSWORD: ${GMAIL_PASSWORD}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+
+  notification-db:
+    image: postgres:18
+    container_name: notification-db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: notification_service_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    restart: unless-stopped
+    volumes:
+      - notification_db_data:/var/lib/postgresql
+    networks:
+      - ms-net
+
+volumes:
+  notification_storage:
+  notification_db_data:
+
+networks:
+  ms-net:
+    external: true
