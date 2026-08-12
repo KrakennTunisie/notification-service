@@ -29,7 +29,6 @@ keycloak:
   realm: test-realm
   client-id: test-client
   client-secret: test-secret
-
   storage:
     local:
       root-path: ./target/test-storage
