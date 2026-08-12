@@ -1,0 +1,72 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/notification_service_test_db
+    username: postgres
+    password: "Mes2021**"
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: create
+
+  flyway:
+    enabled: false
+
+  Kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: true
+        spring.json.type.mapping: >
+          mailResult:com.kerp.notificationservice.domain.model.MailSendResult
+
+    consumer:
+      group-id: notification-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: true
+        spring.json.type.mapping: >
+          notificationEvent:com.kerp.notificationservice.domain.records.NotificationEvent,
+          mailRequest:com.kerp.notificationservice.domain.model.MailJob
+
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+keycloak:
+  url: "http://localhost:8080/realms/kerpy"
+
+feign:
+  client:
+    config:
+      billing-service:
+        connect-timeout: 3000
+        read-timeout: 5000
+        logger-level: basic
+
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    root: info
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  servlet:
+    context-path: /api/notification-service
+  port: 8086
+

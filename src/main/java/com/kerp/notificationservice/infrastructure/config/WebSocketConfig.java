@@ -29,7 +29,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("http://localhost:3000", "https://your-frontend-domain")
+                .setAllowedOriginPatterns(
+                        "http://localhost:3000",
+                        "https://kerp-app.duckdns.org",
+                        "https://kerp-web.duckdns.org",
+                        "http://localhost:8089")
                 .withSockJS(); // fallback for environments blocking native WS
     }
 
