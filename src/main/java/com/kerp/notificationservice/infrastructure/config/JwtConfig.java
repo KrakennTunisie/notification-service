@@ -9,13 +9,12 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 @Configuration
 public class JwtConfig {
 
-    @Value("${keycloak.url}")
-    private String keycloak_url;
+    @Value("${keycloak.url:uri}")
+    private String issuerUri;
+
     @Bean
     JwtDecoder jwtDecoder() {
 
-        return JwtDecoders.fromIssuerLocation(
-               keycloak_url
-        );
+        return JwtDecoders.fromIssuerLocation(issuerUri);
     }
 }
