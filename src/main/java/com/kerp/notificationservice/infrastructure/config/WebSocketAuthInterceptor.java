@@ -34,26 +34,16 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
         System.out.println("STOMP command = " + accessor.getCommand());
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-
-            String authorization =
-                    accessor.getFirstNativeHeader("Authorization");
-
-            System.out.println("AUTH HEADER = " + authorization);
-
-            Authentication authentication =
-                    jwtService.authenticate(
-                            authorization.substring(7)
-                    );
-
-            System.out.println(
-                    "AUTH USER = " + authentication.getName()
-            );
-
-            accessor.setUser(authentication);
-
-            System.out.println(
-                    "PRINCIPAL SET = " + accessor.getUser()
-            );
+            String authorization = accessor.getFirstNativeHeader("Authorization");
+            try {
+                Authentication authentication =
+                        jwtService.authenticate(authorization.substring(7));
+                accessor.setUser(authentication);
+                System.out.println("AUTH OK = " + authentication.getName());
+            } catch (Exception e) {
+                System.out.println("AUTH EXCEPTION: " + e.getClass().getName() + " - " + e.getMessage());
+                e.printStackTrace();
+            }
         }
 
         return message;
