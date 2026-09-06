@@ -21,6 +21,7 @@ services:
       GMAIL_PASSWORD: ${GMAIL_PASSWORD}
       RABBITMQ_USER: ${RABBITMQ_USER}
       RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      KEYCLOAK_NOTIF_URL: ${KEYCLOAK_NOTIF_URL}
 
   notification-db:
     image: postgres:18
